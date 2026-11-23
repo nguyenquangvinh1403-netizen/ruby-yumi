@@ -3,126 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#78dfff">
+<meta name="theme-color" content="#83dcff">
 <title>Ruby & YuMi — Vương quốc Cầu Vồng</title>
 <style>
-:root{--ink:#40365f;--pink:#ff79ae;--violet:#9272ed}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#83ddff;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none}
-body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-#app{height:100%;display:flex;flex-direction:column;background:linear-gradient(#76d9ff,#eafcff)}
-header{height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#fffdebdc;box-shadow:0 2px 9px #476e9820;z-index:2}
-.logo{font-weight:1000;color:#704bc4;font-size:17px;letter-spacing:.2px}.stats{display:flex;gap:12px;font-weight:900;font-size:13px;color:#514574}
-#stage{position:relative;flex:1;min-height:0}canvas{width:100%;height:100%;display:block}
-#mission{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:6px 12px;border-radius:20px;background:#fffde8e8;color:#55477b;font-size:11px;font-weight:850;box-shadow:0 2px 6px #5476a333}
-#controls{position:absolute;left:0;right:0;bottom:calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:end;padding:0 12px;pointer-events:none}
-.group{display:flex;gap:7px;pointer-events:auto}.ctrl{border:2px solid #fff;background:#ffffffdf;color:#51457e;font-weight:1000;font-size:23px;width:54px;height:54px;border-radius:17px;box-shadow:0 4px 0 #aaa0d6;touch-action:none}
-.ctrl:active{transform:translateY(3px);box-shadow:0 1px 0 #aaa0d6}.jump{width:65px;height:65px;border-radius:50%;background:#ff82b5;color:white;box-shadow:0 4px 0 #c84e86}.switch{font-size:10px;background:#9678ed;color:white;box-shadow:0 4px 0 #6548b8}
-#duoControls{display:none;position:absolute;left:0;right:0;bottom:calc(8px + env(safe-area-inset-bottom));justify-content:space-between;padding:0 8px;pointer-events:none}
-.duoSide{display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:auto}.duoLabel{font-size:10px;font-weight:900;color:#554477;background:#ffffffdf;padding:3px 9px;border-radius:20px}
-.duoButtons{display:flex;gap:5px}.duoSide .ctrl{width:43px;height:45px;font-size:18px;border-radius:14px}.duoSide .jump{width:48px;height:48px;border-radius:50%;font-size:20px}
-#screen{position:absolute;inset:0;background:#26304d88;display:flex;align-items:center;justify-content:center;padding:15px;z-index:5}
-.panel{width:min(440px,95vw);max-height:96%;overflow:auto;text-align:center;background:#fff;border:4px solid white;border-radius:25px;padding:18px 16px;box-shadow:0 10px 0 #6248b3}
-h1{font-size:clamp(28px,8vw,39px);line-height:1.05;color:#7654d2;margin:4px 0 6px}.subtitle{margin:0 0 12px;color:#6b6680;font-weight:700}
-.heroes{display:flex;justify-content:center;gap:12px;margin:9px 0 12px}.heroCard{width:112px;padding:7px 5px;border-radius:17px;background:#fff0f6;border:2px solid #ffd0e3;color:#9d3970;font-weight:900}.heroCard.y{background:#f2edff;border-color:#d9ccff;color:#6345b4}
-.heroIcon{height:68px;display:flex;align-items:center;justify-content:center;font-size:45px}
-button.menu{width:100%;padding:12px;border:0;border-radius:14px;background:#805fe4;color:white;font-size:15px;font-weight:900;margin:5px 0;box-shadow:0 4px 0 #5940aa}
-button.pink{background:#ff79ad;box-shadow:0 4px 0 #c94f86}.note{font-size:10px;line-height:1.45;color:#777187;margin:8px 0 0}
-@media(min-width:800px){#controls{max-width:950px;margin:auto;bottom:18px}.ctrl{opacity:.86}}
+:root{--purple:#805ce0;--pink:#ff79ad;--ink:#493d70}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#83dcff;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}#app{height:100%;height:100dvh;display:flex;flex-direction:column;background:linear-gradient(#76d9ff,#eafcff)}header{height:48px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#fffdebdc;z-index:2}.logo{font-weight:1000;color:#704bc4;font-size:16px}.stats{display:flex;gap:13px;font-weight:900;font-size:14px;color:#514574}#stage{position:relative;flex:1;min-height:0;overflow:hidden}canvas{width:100%;height:100%;display:block}#mission{position:absolute;top:8px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:6px 12px;border-radius:20px;background:#fffde8e8;color:#55477b;font-size:11px;font-weight:850;z-index:1}#controls,#duoControls{position:absolute;left:0;right:0;bottom:calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:end;padding:0 12px;pointer-events:none;z-index:2}.group{display:flex;gap:7px;pointer-events:auto}.ctrl{border:2px solid #fff;background:#ffffffeb;color:#51457e;font-weight:1000;font-size:23px;width:54px;height:54px;border-radius:17px;box-shadow:0 4px 0 #aaa0d6;touch-action:none;pointer-events:auto;padding:0}.ctrl:active{transform:translateY(3px);box-shadow:0 1px 0 #aaa0d6}.jump{width:65px;height:65px;border-radius:50%;background:#ff82b5;color:white;box-shadow:0 4px 0 #c84e86}.switch{font-size:10px;background:#9678ed;color:white;box-shadow:0 4px 0 #6548b8}#duoControls{display:none;padding:0 7px}.duoSide{display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:auto}.duoLabel{font-size:10px;font-weight:900;color:#554477;background:#ffffffdf;padding:3px 9px;border-radius:20px}.duoButtons{display:flex;gap:4px}.duoSide .ctrl{width:42px;height:44px;font-size:18px;border-radius:13px}.duoSide .jump{width:47px;height:47px;border-radius:50%;font-size:20px}#screen{position:absolute;inset:0;background:#26304d88;display:flex;align-items:center;justify-content:center;padding:14px;z-index:5}#screen.hidden{display:none!important}.panel{width:min(440px,95vw);max-height:96%;overflow:auto;text-align:center;background:#fff;border:4px solid white;border-radius:25px;padding:17px 16px;box-shadow:0 10px 0 #6248b3}h1{font-size:clamp(28px,8vw,39px);line-height:1.05;color:#7654d2;margin:4px 0 6px}.subtitle{margin:0 0 10px;color:#6b6680;font-weight:700}.heroes{display:flex;justify-content:center;gap:12px;margin:8px 0 11px}.heroCard{width:112px;padding:7px 5px;border-radius:17px;background:#fff0f6;border:2px solid #ffd0e3;color:#9d3970;font-weight:900}.heroCard.y{background:#f2edff;border-color:#d9ccff;color:#6345b4}.heroIcon{height:62px;display:flex;align-items:center;justify-content:center;font-size:43px}button.menu{width:100%;padding:12px;border:0;border-radius:14px;background:#805fe4;color:white;font-size:15px;font-weight:900;margin:5px 0;box-shadow:0 4px 0 #5940aa}.pink{background:#ff79ad!important;box-shadow:0 4px 0 #c94f86!important}.note{font-size:10px;line-height:1.45;color:#777187;margin:8px 0 0}.smallbtn{border:0;border-radius:12px;padding:9px 13px;margin:5px;background:#eee9ff;color:#59449b;font-weight:850}.help{font-size:12px;line-height:1.5;color:#625b76;margin:8px 0}@media(max-height:560px){header{height:40px}.panel{padding:10px 13px}.heroIcon{height:40px}.heroes{margin:5px}.ctrl{width:46px;height:46px}.jump{width:54px;height:54px}}
 </style>
 </head>
-<body>
-<div id="app">
+<body><div id="app">
 <header><div class="logo">🌈 RUBY & YUMI</div><div class="stats"><span>💎 <b id="score">0</b>/12</span><span>❤️ <b id="life">3</b></span></div></header>
-<div id="stage">
-<canvas id="game"></canvas>
-<div id="mission">Thu thập 12 viên ngọc và đến cổng cầu vồng!</div>
-<div id="controls">
- <div class="group"><button class="ctrl" data-control="left">◀</button><button class="ctrl" data-control="right">▶</button></div>
- <div class="group"><button class="ctrl switch" id="switch">ĐỔI<br>NHÂN VẬT</button><button class="ctrl jump" data-control="jump">⬆</button></div>
-</div>
-<div id="duoControls">
- <div class="duoSide"><div class="duoLabel">🌸 RUBY</div><div class="duoButtons"><button class="ctrl" data-player="ruby" data-control="left">◀</button><button class="ctrl" data-player="ruby" data-control="right">▶</button><button class="ctrl jump" data-player="ruby" data-control="jump">⬆</button></div></div>
- <div class="duoSide"><div class="duoLabel">💜 YUMI</div><div class="duoButtons"><button class="ctrl" data-player="yumi" data-control="left">◀</button><button class="ctrl" data-player="yumi" data-control="right">▶</button><button class="ctrl jump" data-player="yumi" data-control="jump">⬆</button></div></div>
-</div>
-<div id="screen"><div class="panel" id="panel">
-<h1>Ruby & YuMi</h1><p class="subtitle">Cuộc phiêu lưu Vương quốc Cầu Vồng</p>
-<div class="heroes"><div class="heroCard"><div class="heroIcon">👧🏻</div>🌸 RUBY<br><small>11 tuổi · Nhảy cao</small></div><div class="heroCard y"><div class="heroIcon">👧🏻</div>💜 YUMI<br><small>8 tuổi · Chạy nhanh</small></div></div>
-<button class="menu" id="one">⭐ Một người chơi</button><button class="menu pink" id="two">👭 Hai người chơi</button>
-<p class="note">Một người: chọn Ruby hoặc YuMi, có thể đổi nhân vật khi chơi.<br>Hai người: mỗi bé có bộ nút cảm ứng riêng ở một góc màn hình.<br>Trên Mac: Ruby dùng A/D/W · YuMi dùng ←/→/↑.</p>
-</div></div>
-</div></div>
+<div id="stage"><canvas id="game" aria-label="Trò chơi Ruby và YuMi"></canvas><div id="mission">Thu thập 12 viên ngọc và đến cổng cầu vồng!</div>
+<div id="controls"><div class="group"><button class="ctrl" data-control="left" aria-label="Đi trái">◀</button><button class="ctrl" data-control="right" aria-label="Đi phải">▶</button></div><div class="group"><button class="ctrl switch" id="switch">ĐỔI<br>NHÂN VẬT</button><button class="ctrl jump" data-control="jump" aria-label="Nhảy">⬆</button></div></div>
+<div id="duoControls"><div class="duoSide"><div class="duoLabel">🌸 RUBY</div><div class="duoButtons"><button class="ctrl" data-player="ruby" data-control="left">◀</button><button class="ctrl" data-player="ruby" data-control="right">▶</button><button class="ctrl jump" data-player="ruby" data-control="jump">⬆</button></div></div><div class="duoSide"><div class="duoLabel">💜 YUMI</div><div class="duoButtons"><button class="ctrl" data-player="yumi" data-control="left">◀</button><button class="ctrl" data-player="yumi" data-control="right">▶</button><button class="ctrl jump" data-player="yumi" data-control="jump">⬆</button></div></div></div>
+<div id="screen"><div class="panel" id="panel"></div></div></div></div>
 <script>
-(()=>{
-const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+(()=>{'use strict';
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),stage=document.getElementById('stage');
 const scoreEl=document.getElementById('score'),lifeEl=document.getElementById('life'),screen=document.getElementById('screen'),panel=document.getElementById('panel');
-let W=900,H=540,world=3650,camera=0,score=0,lives=3,mode='one',active='ruby',playing=false,last=0,keys={},touch={},gems=[],platforms=[],enemies=[],players={};
-const floor=462;
-function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0)}
-new ResizeObserver(resize).observe(canvas);resize();
-function actor(id,x){return{id,x,y:floor-55,w:38,h:55,vx:0,vy:0,ground:false,face:1,walk:0,inv:0}}
-function buildLevel(){
- platforms=[{x:0,y:floor,w:world,h:100}];
- [[320,380,145],[565,315,130],[825,375,150],[1110,320,150],[1390,380,150],[1675,310,145],[1960,370,150],[2250,315,145],[2540,375,150],[2830,315,150],[3160,370,150]].forEach(a=>platforms.push({x:a[0],y:a[1],w:a[2],h:18}));
- gems=[];for(let i=0;i<12;i++){let x=225+i*280,p=platforms.find(q=>q.x<x&&q.x+q.w>x&&q.y<floor);gems.push({x,y:p?p.y-39:floor-60,got:false,phase:i})}
- enemies=[{x:720,min:680,max:790,d:1},{x:1510,min:1450,max:1580,d:-1},{x:2350,min:2280,max:2420,d:1},{x:3000,min:2940,max:3070,d:-1}];
- players={ruby:actor('ruby',85),yumi:actor('yumi',145)}
+const VW=900,VH=540,FLOOR=462,WORLD=3650,TOTAL=12;
+let scaleX=1,scaleY=1,camera=0,mode='one',active='ruby',playing=false,paused=false,last=0,gemCount=0,lives=3,keys={},touch={},gems=[],platforms=[],enemies=[],players={};
+function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(r.width*d));canvas.height=Math.max(1,Math.round(r.height*d));scaleX=canvas.width/VW;scaleY=canvas.height/VH;ctx.setTransform(scaleX,0,0,scaleY,0,0)}
+new ResizeObserver(resize).observe(stage);window.addEventListener('orientationchange',()=>setTimeout(resize,120));resize();
+function actor(id,x){return{id,x,y:FLOOR-54,w:38,h:54,vx:0,vy:0,ground:false,face:1,walk:0,inv:0}}
+function buildLevel(){platforms=[{x:0,y:FLOOR,w:WORLD,h:100}];[[320,380,145],[565,315,130],[825,375,150],[1110,320,150],[1390,380,150],[1675,310,145],[1960,370,150],[2250,315,145],[2540,375,150],[2830,315,150],[3160,370,150]].forEach(a=>platforms.push({x:a[0],y:a[1],w:a[2],h:18}));
+ gems=[];for(let i=0;i<TOTAL;i++){const x=210+i*280;let candidates=platforms.filter(p=>p.x<x&&p.x+p.w>x&&p.y<FLOOR);let p=candidates.length?candidates[0]:null;gems.push({x,y:p?p.y-35:FLOOR-52,got:false,phase:i})}
+ enemies=[{x:720,min:680,max:790,d:1},{x:1510,min:1450,max:1580,d:-1},{x:2350,min:2280,max:2420,d:1},{x:3000,min:2940,max:3070,d:-1}];players={ruby:actor('ruby',85),yumi:actor('yumi',145)};
 }
-function rr(x,y,w,h,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
-function cloud(x,y,s){ctx.fillStyle='#ffffffdf';ctx.beginPath();ctx.arc(x,y,18*s,0,7);ctx.arc(x+22*s,y-8*s,24*s,0,7);ctx.arc(x+48*s,y,18*s,0,7);ctx.fill()}
-function drawHero(p){
- if(p.inv>0&&Math.floor(p.inv*12)%2===0)return;
- let x=p.x,y=p.y,hair=p.id==='ruby'?'#59372f':'#39294d',dress=p.id==='ruby'?'#ff78ad':'#9877f2',bow=p.id==='ruby'?'#ff3e91':'#d0b0ff';
- rr(x+4,y+3,31,29,13,hair);rr(x+1,y+15,10,27,7,hair);
- let step=Math.sin(p.walk)*4*(Math.abs(p.vx)>0?1:0);
- rr(x+7,y+43,10,12,4,'#594b8b');rr(x+22,y+43+step,10,12,4,'#594b8b');
- rr(x+4,y+25,31,23,10,dress);
- ctx.fillStyle=p.id==='ruby'?'#ffb8d3':'#d9caff';ctx.beginPath();ctx.moveTo(x+3,y+42);ctx.lineTo(x+37,y+42);ctx.lineTo(x+33,y+51);ctx.lineTo(x+7,y+51);ctx.fill();
- rr(x+7,y+5,26,26,11,'#ffd8bb');
- ctx.fillStyle=hair;ctx.beginPath();ctx.moveTo(x+5,y+15);ctx.quadraticCurveTo(x+6,y-2,x+23,y+2);ctx.quadraticCurveTo(x+36,y+3,x+34,y+17);ctx.quadraticCurveTo(x+23,y+8,x+16,y+14);ctx.quadraticCurveTo(x+11,y+19,x+5,y+15);ctx.fill();
- ctx.fillStyle='#382c39';ctx.fillRect(x+14,y+17,3,4);ctx.fillRect(x+25,y+17,3,4);
- ctx.strokeStyle='#a95763';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+22,y+22,4,.15,Math.PI-.15);ctx.stroke();
- ctx.fillStyle=bow;ctx.beginPath();ctx.moveTo(x+28,y+5);ctx.lineTo(x+37,y);ctx.lineTo(x+36,y+10);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(x+28,y+5);ctx.lineTo(x+20,y);ctx.lineTo(x+21,y+10);ctx.closePath();ctx.fill();
- ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#493c70';ctx.fillText(p.id==='ruby'?'Ruby':'YuMi',x+19,y-7)
-}
-function draw(){
- ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#73d8ff');sky.addColorStop(1,'#e8fbff');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
- for(let i=0;i<8;i++)cloud((i*180-camera*.18%1100+1100)%1100,90+(i%3)*48,.85);
- for(let i=0;i<8;i++){let x=i*220-camera*.28%220;ctx.fillStyle=i%2?'#a6e9a0':'#91dfa0';ctx.beginPath();ctx.arc(x+70,floor+30,125,Math.PI,0);ctx.fill()}
- ctx.save();ctx.translate(-camera,0);
- platforms.forEach((p,i)=>{rr(p.x,p.y,p.w,p.h,8,i===0?'#4eb65f':'#9a72eb');rr(p.x,p.y,p.w,8,6,i===0?'#91e46c':'#d8c5ff');if(i===0)for(let x=p.x;x<p.x+p.w;x+=42){ctx.fillStyle='#3c9c52';ctx.fillRect(x,p.y+24,22,6)}});
- for(let x=80;x<world;x+=170){ctx.strokeStyle='#399b52';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,floor);ctx.lineTo(x,floor-16);ctx.stroke();for(let a=0;a<5;a++){let ang=a*Math.PI*2/5;ctx.fillStyle='#ff8dbb';ctx.beginPath();ctx.arc(x+Math.cos(ang)*5,floor-18+Math.sin(ang)*5,4,0,7);ctx.fill()}ctx.fillStyle='#ffdc63';ctx.beginPath();ctx.arc(x,floor-18,3,0,7);ctx.fill()}
- gems.forEach(g=>{if(g.got)return;let yy=g.y+Math.sin(performance.now()/250+g.phase)*5;ctx.save();ctx.translate(g.x,yy);ctx.rotate(Math.PI/4);rr(-9,-9,18,18,3,'#37cfff');ctx.restore();ctx.fillStyle='#d9ffff';ctx.fillRect(g.x-3,yy-7,3,7)});
- enemies.forEach(e=>{rr(e.x,floor-29,32,28,11,'#8054a8');ctx.fillStyle='white';ctx.fillRect(e.x+7,floor-21,6,7);ctx.fillRect(e.x+20,floor-21,6,7);ctx.fillStyle='#39294e';ctx.fillRect(e.x+9,floor-19,2,4);ctx.fillRect(e.x+22,floor-19,2,4)});
- Object.values(players).forEach(p=>{if(mode==='one'&&p.id!==active)return;drawHero(p)});
- let gx=world-90;ctx.lineWidth=13;['#ff658c','#ffb84f','#ffec65','#63d88a','#57c9ed','#9275ed'].forEach((c,i)=>{ctx.strokeStyle=c;ctx.beginPath();ctx.arc(gx,floor+1,70-i*8,Math.PI,Math.PI*2);ctx.stroke()});rr(gx-9,floor-5,18,90,5,'#fff');
- ctx.restore();
-}
-function input(p){
- if(mode==='two'){if(p.id==='ruby')return{l:keys.a||touch.rubyLeft,r:keys.d||touch.rubyRight,j:keys.w||touch.rubyJump};return{l:keys.arrowleft||touch.yumiLeft,r:keys.arrowright||touch.yumiRight,j:keys.arrowup||touch.yumiJump}}
- if(p.id!==active)return{l:false,r:false,j:false};
- return{l:keys.arrowleft||keys.a||touch.left,r:keys.arrowright||keys.d||touch.right,j:keys.arrowup||keys.w||keys[' ']||touch.jump}
-}
-function update(dt){
- Object.values(players).forEach(p=>{if(mode==='one'&&p.id!==active)return;let k=input(p),speed=p.id==='yumi'?270:225;p.vx=0;if(k.l){p.vx=-speed;p.face=-1}if(k.r){p.vx=speed;p.face=1}if(k.j&&p.ground){p.vy=p.id==='ruby'?-600:-535;p.ground=false}
- p.vy+=1550*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.x=Math.max(0,Math.min(world-p.w,p.x));p.ground=false;p.walk+=dt*10;
- platforms.forEach(pl=>{if(p.x+p.w>pl.x&&p.x<pl.x+pl.w&&p.y+p.h>=pl.y&&p.y+p.h-p.vy*dt<=pl.y&&p.vy>=0){p.y=pl.y-p.h;p.vy=0;p.ground=true}});
- if(p.y>H+90){p.x=75;p.y=floor-p.h;p.vy=0;lives--;lifeEl.textContent=lives;if(lives<=0)finish(false)}if(p.inv>0)p.inv-=dt});
- enemies.forEach(e=>{e.x+=e.d*70*dt;if(e.x<e.min||e.x>e.max)e.d*=-1});
- Object.values(players).forEach(p=>{if(mode==='one'&&p.id!==active)return;enemies.forEach(e=>{if(p.inv<=0&&p.x+p.w>e.x&&p.x<e.x+32&&p.y+p.h>floor-30&&p.y<floor){if(p.vy>120){e.x=-300;score++;scoreEl.textContent=score;p.vy=-310}else{p.inv=1.5;lives--;lifeEl.textContent=lives;p.x-=p.face*35;if(lives<=0)finish(false)}}})});
- gems.forEach(g=>{if(g.got)return;Object.values(players).forEach(p=>{if(mode==='one'&&p.id!==active)return;if(p.x+p.w>g.x-11&&p.x<g.x+11&&p.y+p.h>g.y-12&&p.y<g.y+12){g.got=true;score++;scoreEl.textContent=score}})});
- let lead=mode==='two'?Math.max(players.ruby.x,players.yumi.x):players[active].x;camera=Math.max(0,Math.min(world-W,lead-W*.37));
- let goal=mode==='one'?players[active].x:Math.min(players.ruby.x,players.yumi.x);if(goal>world-160&&score>=12)finish(true)
-}
-function finish(win){if(!playing)return;playing=false;screen.classList.remove('hidden');panel.innerHTML=`<h1>${win?'🎉 Tuyệt vời!':'💗 Thử lại nhé!'}</h1><p class="subtitle">${win?'Ruby và YuMi đã mở Cổng Cầu Vồng!':'Hai chị em cùng cố gắng nhé!'}</p><p><b>Ngọc thu thập: ${score}/12</b></p><button class="menu" id="retry">Chơi lại</button><button class="menu pink" id="home">Màn hình đầu</button>`;document.getElementById('retry').onclick=()=>start(mode);document.getElementById('home').onclick=menu}
-function menu(){screen.classList.remove('hidden');panel.innerHTML=`<h1>Ruby & YuMi</h1><p class="subtitle">Cuộc phiêu lưu Vương quốc Cầu Vồng</p><div class="heroes"><div class="heroCard"><div class="heroIcon">👧🏻</div>🌸 RUBY<br><small>11 tuổi · Nhảy cao</small></div><div class="heroCard y"><div class="heroIcon">👧🏻</div>💜 YUMI<br><small>8 tuổi · Chạy nhanh</small></div></div><button class="menu" id="one">⭐ Một người chơi</button><button class="menu pink" id="two">👭 Hai người chơi</button><p class="note">Một người: đổi nhân vật bằng nút giữa màn hình.<br>Hai người: mỗi bé có bộ nút riêng ở một góc màn hình.<br>Mac: Ruby dùng A/D/W · YuMi dùng phím mũi tên.</p>`;document.getElementById('one').onclick=()=>start('one');document.getElementById('two').onclick=()=>start('two')}
-function start(m){mode=m;active='ruby';score=0;lives=3;scoreEl.textContent='0';lifeEl.textContent='3';buildLevel();screen.classList.add('hidden');document.getElementById('controls').style.display=m==='one'?'flex':'none';document.getElementById('duoControls').style.display=m==='two'?'flex':'none';playing=true;last=performance.now();requestAnimationFrame(loop)}
-function loop(t){if(!playing)return;let dt=Math.min((t-last)/1000,.032);last=t;update(dt);draw();if(playing)requestAnimationFrame(loop)}
-document.getElementById('one').onclick=()=>start('one');document.getElementById('two').onclick=()=>start('two');
-document.getElementById('switch').onclick=()=>{if(mode==='one')active=active==='ruby'?'yumi':'ruby'};
-window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();keys[k]=true;if(['arrowleft','arrowright','arrowup',' '].includes(k))e.preventDefault()});
-window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-document.querySelectorAll('[data-control]').forEach(b=>{let c=b.dataset.control,id=b.dataset.player;let key=id?(id==='ruby'?'ruby':'yumi')+c[0].toUpperCase()+c.slice(1):c;b.addEventListener('pointerdown',e=>{e.preventDefault();touch[key]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,e=>{e.preventDefault();touch[key]=false}))});
-buildLevel();draw();
+function roundRect(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function cloud(x,y,s){ctx.fillStyle='#ffffffdf';ctx.beginPath();ctx.arc(x,y,18*s,0,Math.PI*2);ctx.arc(x+22*s,y-8*s,24*s,0,Math.PI*2);ctx.arc(x+48*s,y,18*s,0,Math.PI*2);ctx.fill()}
+function drawHero(p){if(p.inv>0&&Math.floor(p.inv*12)%2===0)return;const x=p.x,y=p.y,hair=p.id==='ruby'?'#59372f':'#39294d',dress=p.id==='ruby'?'#ff78ad':'#9877f2',bow=p.id==='ruby'?'#ff3e91':'#d0b0ff',step=Math.sin(p.walk)*4*(Math.abs(p.vx)>0?1:0);
+ roundRect(x+4,y+3,31,29,13,hair);roundRect(x+1,y+15,10,27,7,hair);roundRect(x+7,y+43,10,11,4,'#594b8b');roundRect(x+22,y+43+step,10,11,4,'#594b8b');roundRect(x+4,y+25,31,23,10,dress);
+ ctx.fillStyle=p.id==='ruby'?'#ffb8d3':'#d9caff';ctx.beginPath();ctx.moveTo(x+3,y+42);ctx.lineTo(x+37,y+42);ctx.lineTo(x+33,y+51);ctx.lineTo(x+7,y+51);ctx.fill();roundRect(x+7,y+5,26,26,11,'#ffd8bb');ctx.fillStyle=hair;ctx.beginPath();ctx.moveTo(x+5,y+15);ctx.quadraticCurveTo(x+6,y-2,x+23,y+2);ctx.quadraticCurveTo(x+36,y+3,x+34,y+17);ctx.quadraticCurveTo(x+23,y+8,x+16,y+14);ctx.quadraticCurveTo(x+11,y+19,x+5,y+15);ctx.fill();ctx.fillStyle='#382c39';ctx.fillRect(x+14,y+17,3,4);ctx.fillRect(x+25,y+17,3,4);ctx.strokeStyle='#a95763';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+22,y+22,4,.15,Math.PI-.15);ctx.stroke();ctx.fillStyle=bow;ctx.beginPath();ctx.moveTo(x+28,y+5);ctx.lineTo(x+37,y);ctx.lineTo(x+36,y+10);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(x+28,y+5);ctx.lineTo(x+20,y);ctx.lineTo(x+21,y+10);ctx.closePath();ctx.fill();ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#493c70';ctx.fillText(p.id==='ruby'?'Ruby':'YuMi',x+19,y-7)}
+function draw(){ctx.clearRect(0,0,VW,VH);let sky=ctx.createLinearGradient(0,0,0,VH);sky.addColorStop(0,'#73d8ff');sky.addColorStop(1,'#e8fbff');ctx.fillStyle=sky;ctx.fillRect(0,0,VW,VH);for(let i=0;i<8;i++)cloud((i*180-camera*.18%1100+1100)%1100,90+(i%3)*48,.85);for(let i=0;i<8;i++){let x=i*220-camera*.28%220;ctx.fillStyle=i%2?'#a6e9a0':'#91dfa0';ctx.beginPath();ctx.arc(x+70,FLOOR+30,125,Math.PI,0);ctx.fill()}
+ ctx.save();ctx.translate(-camera,0);platforms.forEach((p,i)=>{roundRect(p.x,p.y,p.w,p.h,8,i===0?'#4eb65f':'#9a72eb');roundRect(p.x,p.y,p.w,8,6,i===0?'#91e46c':'#d8c5ff')});for(let x=80;x<WORLD;x+=170){ctx.strokeStyle='#399b52';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,FLOOR);ctx.lineTo(x,FLOOR-16);ctx.stroke();for(let a=0;a<5;a++){let ang=a*Math.PI*2/5;ctx.fillStyle='#ff8dbb';ctx.beginPath();ctx.arc(x+Math.cos(ang)*5,FLOOR-18+Math.sin(ang)*5,4,0,Math.PI*2);ctx.fill()}ctx.fillStyle='#ffdc63';ctx.beginPath();ctx.arc(x,FLOOR-18,3,0,Math.PI*2);ctx.fill()}
+ gems.forEach(g=>{if(g.got)return;let yy=g.y+Math.sin(performance.now()/250+g.phase)*5;ctx.save();ctx.translate(g.x,yy);ctx.rotate(Math.PI/4);roundRect(-9,-9,18,18,3,'#37cfff');ctx.restore();ctx.fillStyle='#d9ffff';ctx.fillRect(g.x-3,yy-7,3,7)});
+ enemies.forEach(e=>{if(e.dead)return;roundRect(e.x,FLOOR-29,32,28,11,'#8054a8');ctx.fillStyle='white';ctx.fillRect(e.x+7,FLOOR-21,6,7);ctx.fillRect(e.x+20,FLOOR-21,6,7);ctx.fillStyle='#39294e';ctx.fillRect(e.x+9,FLOOR-19,2,4);ctx.fillRect(e.x+22,FLOOR-19,2,4)});
+ Object.values(players).forEach(p=>{if(mode==='two'||p.id===active)drawHero(p)});let gx=WORLD-90;ctx.lineWidth=13;['#ff658c','#ffb84f','#ffec65','#63d88a','#57c9ed','#9275ed'].forEach((c,i)=>{ctx.strokeStyle=c;ctx.beginPath();ctx.arc(gx,FLOOR+1,70-i*8,Math.PI,Math.PI*2);ctx.stroke()});roundRect(gx-9,FLOOR-5,18,90,5,'#fff');ctx.restore()}
+function input(p){if(mode==='two'){if(p.id==='ruby')return{l:keys.a||touch.rubyLeft,r:keys.d||touch.rubyRight,j:keys.w||touch.rubyJump};return{l:keys.arrowleft||touch.yumiLeft,r:keys.arrowright||touch.yumiRight,j:keys.arrowup||touch.yumiJump}}if(p.id!==active)return{l:false,r:false,j:false};return{l:keys.arrowleft||keys.a||touch.left,r:keys.arrowright||keys.d||touch.right,j:keys.arrowup||keys.w||keys[' ']||touch.jump}}
+function update(dt){for(const p of Object.values(players)){if(mode==='one'&&p.id!==active)continue;const k=input(p),speed=p.id==='yumi'?270:225,oldY=p.y;p.vx=0;if(k.l){p.vx=-speed;p.face=-1}if(k.r){p.vx=speed;p.face=1}if(k.j&&p.ground){p.vy=p.id==='ruby'?-610:-545;p.ground=false}p.vy=Math.min(950,p.vy+1550*dt);p.x=Math.max(0,Math.min(WORLD-p.w,p.x+p.vx*dt));p.y+=p.vy*dt;p.ground=false;p.walk+=dt*10;
+ for(const pl of platforms){if(p.x+p.w>pl.x&&p.x<pl.x+pl.w&&oldY+p.h<=pl.y+2&&p.y+p.h>=pl.y&&p.vy>=0){p.y=pl.y-p.h;p.vy=0;p.ground=true}}
+ if(p.y>VH+100){loseLife(p)}if(p.inv>0)p.inv=Math.max(0,p.inv-dt)}
+ enemies.forEach(e=>{if(e.dead)return;e.x+=e.d*72*dt;if(e.x<e.min||e.x>e.max)e.d*=-1});
+ for(const p of Object.values(players)){if(mode==='one'&&p.id!==active)continue;for(const e of enemies){if(e.dead||p.inv>0)continue;if(p.x+p.w>e.x&&p.x<e.x+32&&p.y+p.h>FLOOR-30&&p.y<FLOOR){if(p.vy>100&&p.y+p.h<FLOOR+5){e.dead=true;p.vy=-330}else{p.inv=1.25;loseLife(p);p.x=Math.max(0,p.x-p.face*28)}}}}
+ for(const g of gems){if(g.got)continue;for(const p of Object.values(players)){if(mode==='one'&&p.id!==active)continue;if(p.x+p.w>g.x-12&&p.x<g.x+12&&p.y+p.h>g.y-12&&p.y<g.y+15){g.got=true;gemCount++;scoreEl.textContent=gemCount;break}}}
+ const lead=mode==='two'?Math.max(players.ruby.x,players.yumi.x):players[active].x;camera=Math.max(0,Math.min(WORLD-VW,lead-VW*.37));const atGoal=mode==='one'?players[active].x>WORLD-160:(players.ruby.x>WORLD-160&&players.yumi.x>WORLD-160);if(atGoal&&gemCount>=TOTAL)finish(true);}
+function loseLife(p){if(p._fallLock)return;p._fallLock=true;lives--;lifeEl.textContent=lives;p.x=mode==='two'?(p.id==='ruby'?85:145):85;p.y=FLOOR-p.h;p.vy=0;p.inv=1.5;setTimeout(()=>p._fallLock=false,350);if(lives<=0)finish(false)}
+function finish(win){if(!playing)return;playing=false;document.getElementById('controls').style.display='none';document.getElementById('duoControls').style.display='none';showEnd(win)}
+function showEnd(win){screen.classList.remove('hidden');panel.innerHTML=`<h1>${win?'🎉 Tuyệt vời!':'💗 Thử lại nhé!'}</h1><p class="subtitle">${win?'Ruby và YuMi đã mở Cổng Cầu Vồng!':'Hai chị em cùng cố gắng nhé!'}</p><p><b>Ngọc thu thập: ${gemCount}/${TOTAL}</b></p><button class="menu" id="retry">🔁 Chơi lại</button><button class="menu pink" id="home">Màn hình đầu</button>`;document.getElementById('retry').onclick=()=>start(mode);document.getElementById('home').onclick=menu}
+function menu(){playing=false;paused=false;document.getElementById('controls').style.display='none';document.getElementById('duoControls').style.display='none';screen.classList.remove('hidden');panel.innerHTML=`<h1>Ruby & YuMi</h1><p class="subtitle">Cuộc phiêu lưu Vương quốc Cầu Vồng</p><div class="heroes"><div class="heroCard"><div class="heroIcon">👧🏻</div>🌸 RUBY<br><small>11 tuổi · Nhảy cao</small></div><div class="heroCard y"><div class="heroIcon">👧🏻</div>💜 YUMI<br><small>8 tuổi · Chạy nhanh</small></div></div><button class="menu" id="one">⭐ Một người chơi</button><button class="menu pink" id="two">👭 Hai người chơi</button><p class="help">Một người: dùng ◀ ▶ để di chuyển, ⬆ để nhảy; bấm ĐỔI NHÂN VẬT để đổi Ruby/YuMi.<br>Hai người: Ruby dùng A/D/W trên bàn phím hoặc cụm nút bên trái; YuMi dùng phím mũi tên hoặc cụm nút bên phải.</p><p class="note">Thu thập đủ 12 viên ngọc, tránh quái vật và cùng đến cổng cầu vồng.</p>`;document.getElementById('one').onclick=()=>start('one');document.getElementById('two').onclick=()=>start('two')}
+function start(m){mode=m;active='ruby';gemCount=0;lives=3;scoreEl.textContent='0';lifeEl.textContent='3';keys={};touch={};buildLevel();screen.classList.add('hidden');document.getElementById('controls').style.display=m==='one'?'flex':'none';document.getElementById('duoControls').style.display=m==='two'?'flex':'none';playing=true;last=performance.now();requestAnimationFrame(loop)}
+function loop(t){if(!playing)return;const dt=Math.min((t-last)/1000,.03);last=t;update(dt);draw();if(playing)requestAnimationFrame(loop)}
+document.getElementById('switch').addEventListener('click',()=>{if(mode==='one')active=active==='ruby'?'yumi':'ruby'});
+window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;if(['arrowleft','arrowright','arrowup',' '].includes(k))e.preventDefault()});window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});window.addEventListener('blur',()=>{keys={};touch={}});
+document.querySelectorAll('[data-control]').forEach(b=>{const c=b.dataset.control,id=b.dataset.player;const key=id?(id==='ruby'?'ruby':'yumi')+c[0].toUpperCase()+c.slice(1):c;b.addEventListener('pointerdown',e=>{e.preventDefault();touch[key]=true;if(b.setPointerCapture)b.setPointerCapture(e.pointerId)});const release=e=>{e.preventDefault();touch[key]=false};['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,release))});
+buildLevel();draw();menu();
 })();
-</script>
-</body></html>
+</script></body></html>
