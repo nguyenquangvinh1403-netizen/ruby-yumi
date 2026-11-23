@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#77d9ff">
+<title>Ruby & YuMi — Vương quốc Cầu Vồng</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#78dfff;font-family:system-ui,-apple-system,sans-serif;touch-action:none;user-select:none}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#app{height:100%;display:flex;flex-direction:column;background:linear-gradient(#75d9ff,#e8fbff)}
+header{height:54px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 13px;background:#fffdebdc;box-shadow:0 2px 8px #4a91a622;z-index:2}
+.logo{font-weight:1000;color:#714cc8;font-size:18px;letter-spacing:.3px}.stats{display:flex;gap:12px;font-weight:900;font-size:13px;color:#55447d}
+#stage{position:relative;flex:1;min-height:0;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+#mission{position:absolute;top:10px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:6px 12px;border-radius:20px;background:#fffde6df;color:#55447d;font-size:12px;font-weight:850;box-shadow:0 2px 6px #5476a333}
+#controls{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:space-between;align-items:end;padding:0 14px;pointer-events:none}
+.group{display:flex;gap:9px;pointer-events:auto}
+.ctrl{border:2px solid #fff;background:#ffffffdb;color:#51457e;font-weight:1000;font-size:24px;width:58px;height:58px;border-radius:19px;box-shadow:0 4px 0 #aaa0d6;touch-action:none}
+.ctrl:active{transform:translateY(3px);box-shadow:0 1px 0 #aaa0d6}
+.jump{width:72px;height:72px;border-radius:50%;background:#ff82b5;color:white;box-shadow:0 4px 0 #c84e86}
+.switch{font-size:11px;background:#9678ed;color:white;box-shadow:0 4px 0 #6548b8}
+#screen{position:absolute;inset:0;background:#26304d88;display:flex;align-items:center;justify-content:center;padding:18px;z-index:5}
+.panel{width:min(440px,94vw);max-height:95%;overflow:auto;text-align:center;background:#fff;border:4px solid white;border-radius:26px;padding:20px 18px;box-shadow:0 10px 0 #6248b3}
+h1{font-size:clamp(28px,8vw,40px);line-height:1.05;color:#7654d2;margin:4px 0 7px}
+.subtitle{margin:0 0 14px;color:#6b6680;font-weight:700}
+.heroes{display:flex;justify-content:center;gap:15px;margin:10px 0 14px}
+.heroCard{width:112px;padding:9px 5px;border-radius:18px;background:#fff0f6;border:2px solid #ffd0e3;color:#9d3970;font-weight:900}
+.heroCard.y{background:#f2edff;border-color:#d9ccff;color:#6345b4}
+.heroIcon{height:76px;display:flex;align-items:center;justify-content:center;font-size:48px}
+button.menu{width:100%;padding:13px 12px;border:0;border-radius:15px;background:#805fe4;color:white;font-size:15px;font-weight:900;margin:5px 0;box-shadow:0 4px 0 #5940aa}
+button.pink{background:#ff79ad;box-shadow:0 4px 0 #c94f86}
+.note{font-size:11px;line-height:1.45;color:#777187;margin:10px 0 0}
+.hidden{display:none!important}
+@media(min-width:800px){#controls{max-width:950px;margin:auto;bottom:20px}.ctrl{opacity:.85}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="logo">🌈 RUBY & YUMI</div><div class="stats"><span>💎 <b id="score">0</b>/12</span><span>❤️ <b id="life">3</b></span></div></header>
+<div id="stage">
+<canvas id="c"></canvas>
+<div id="mission">Thu thập 12 viên ngọc và tìm cổng cầu vồng!</div>
+<div id="controls">
+ <div class="group"><button class="ctrl" data-k="left">◀</button><button class="ctrl" data-k="right">▶</button></div>
+ <div class="group"><button class="ctrl switch" id="swap">ĐỔI<br>NHÂN VẬT</button><button class="ctrl jump" data-k="jump">⬆</button></div>
+</div>
+<div id="screen"><div class="panel" id="panel">
+<h1>Ruby & YuMi</h1><p class="subtitle">Cuộc phiêu lưu Vương quốc Cầu Vồng</p>
+<div class="heroes"><div class="heroCard"><div class="heroIcon">👧🏻</div>🌸 RUBY<br><small>11 tuổi · Nhảy cao</small></div><div class="heroCard y"><div class="heroIcon">👧🏻</div>💜 YUMI<br><small>8 tuổi · Chạy nhanh</small></div></div>
+<button class="menu" id="one">⭐ Một người chơi</button><button class="menu pink" id="two">👭 Hai người chơi</button>
+<p class="note">Một người: chọn nhân vật và đổi bất cứ lúc nào.<br>Hai người: Ruby dùng A/D/W · YuMi dùng ←/→/↑.<br>Trên iPhone, chạm các nút điều khiển ở hai góc màn hình.</p>
+</div></div>
+</div>
+</div>
+<script>
+(()=>{
+const cv=document.getElementById('c'),cx=cv.getContext('2d');
+const scoreBox=document.getElementById('score'),lifeBox=document.getElementById('life'),screen=document.getElementById('screen'),panel=document.getElementById('panel');
+let vw=900,vh=540,world=3600,cam=0,score=0,lives=3,mode='one',active='ruby',playing=false,last=0,keys={},touch={left:false,right:false,jump:false},gems=[],platforms=[],enemies=[],fx=[],actors={};
+const floor=460;
+function fit(){let r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d);cx.setTransform(cv.width/vw,0,0,cv.height/vh,0,0)}
+new ResizeObserver(fit).observe(cv);fit();
+function makeActor(id,x){return {id,x,y:floor-54,w:38,h:54,vx:0,vy:0,ground:false,face:1,blink:0,walk:0,inv:0}}
+function level(){
+ platforms=[{x:0,y:floor,w:world,h:100}];
+ [[330,380,145],[570,315,130],[820,375,150],[1110,320,150],[1390,380,150],[1670,310,145],[1950,370,150],[2240,315,145],[2530,375,150],[2820,315,150],[3150,370,150]].forEach(a=>platforms.push({x:a[0],y:a[1],w:a[2],h:18}));
+ gems=[];for(let i=0;i<12;i++){let x=230+i*275;let p=platforms.find(q=>q.x<x&&q.x+q.w>x&&q.y<floor);gems.push({x,y:p?p.y-38:floor-60,got:false,phase:i});}
+ enemies=[{x:720,min:680,max:790,d:1},{x:1510,min:1450,max:1580,d:-1},{x:2350,min:2280,max:2420,d:1},{x:3000,min:2940,max:3070,d:-1}];
+ actors={ruby:makeActor('ruby',85),yumi:makeActor('yumi',145)};
+}
+function rounded(x,y,w,h,r,col){cx.fillStyle=col;cx.beginPath();cx.roundRect(x,y,w,h,r);cx.fill()}
+function drawCloud(x,y,s=1){cx.fillStyle='#ffffffdf';cx.beginPath();cx.arc(x,y,18*s,0,7);cx.arc(x+22*s,y-8*s,24*s,0,7);cx.arc(x+48*s,y,18*s,0,7);cx.fill()}
+function drawHero(p){
+ if(p.inv>0&&Math.floor(p.inv*12)%2===0)return;
+ let x=p.x,y=p.y,skin='#ffd8bb',hair=p.id==='ruby'?'#55352f':'#392b4e',dress=p.id==='ruby'?'#ff77ad':'#9877f2',bow=p.id==='ruby'?'#ff3e91':'#d3b5ff';
+ // hair behind head
+ rounded(x+4,y+3,31,29,13,hair);rounded(x+1,y+15,10,27,7,hair);
+ // legs
+ let step=Math.sin(p.walk)*4*(Math.abs(p.vx)>0?1:0);
+ rounded(x+7,y+43,10,11,4,'#594b8b');rounded(x+22,y+43+step,10,11,4,'#594b8b');
+ // dress
+ rounded(x+4,y+25,31,23,10,dress);cx.fillStyle=p.id==='ruby'?'#ffb4d0':'#d7c7ff';cx.beginPath();cx.moveTo(x+3,y+42);cx.lineTo(x+37,y+42);cx.lineTo(x+33,y+50);cx.lineTo(x+7,y+50);cx.fill();
+ // face
+ rounded(x+7,y+5,26,26,11,skin);
+ // bangs
+ cx.fillStyle=hair;cx.beginPath();cx.moveTo(x+5,y+15);cx.quadraticCurveTo(x+6,y-2,x+23,y+2);cx.quadraticCurveTo(x+36,y+3,x+34,y+17);cx.quadraticCurveTo(x+23,y+8,x+16,y+14);cx.quadraticCurveTo(x+11,y+19,x+5,y+15);cx.fill();
+ // eyes and smile
+ cx.fillStyle='#382c39';cx.fillRect(x+14,y+17,3,4);cx.fillRect(x+25,y+17,3,4);
+ cx.strokeStyle='#a95763';cx.lineWidth=1.5;cx.beginPath();cx.arc(x+22,y+22,4,.15,Math.PI-.15);cx.stroke();
+ // bow
+ cx.fillStyle=bow;cx.beginPath();cx.moveTo(x+28,y+5);cx.lineTo(x+37,y);cx.lineTo(x+36,y+10);cx.closePath();cx.fill();cx.beginPath();cx.moveTo(x+28,y+5);cx.lineTo(x+20,y);cx.lineTo(x+21,y+10);cx.closePath();cx.fill();
+ // label
+ cx.font='bold 12px system-ui';cx.textAlign='center';cx.fillStyle='#493c70';cx.fillText(p.id==='ruby'?'Ruby':'YuMi',x+19,y-7);
+}
+function draw(){
+ cx.clearRect(0,0,vw,vh);
+ let sky=cx.createLinearGradient(0,0,0,vh);sky.addColorStop(0,'#73d8ff');sky.addColorStop(1,'#e8fbff');cx.fillStyle=sky;cx.fillRect(0,0,vw,vh);
+ // distant cloud banks
+ for(let i=0;i<8;i++)drawCloud((i*180-cam*.18%1100+1100)%1100,90+(i%3)*48,.85);
+ // hills
+ for(let i=0;i<8;i++){let x=i*220-cam*.28%220;cx.fillStyle=i%2?'#a6e9a0':'#91dfa0';cx.beginPath();cx.arc(x+70,floor+30,125,Math.PI,0);cx.fill()}
+ cx.save();cx.translate(-cam,0);
+ platforms.forEach((p,i)=>{rounded(p.x,p.y,p.w,p.h,8,i===0?'#4eb65f':'#9a72eb');rounded(p.x,p.y,p.w,8,6,i===0?'#91e46c':'#d8c5ff');if(i===0){for(let x=p.x;x<p.x+p.w;x+=42){cx.fillStyle='#3c9c52';cx.fillRect(x,p.y+24,22,6)}}});
+ // flowers
+ for(let x=80;x<world;x+=170){cx.strokeStyle='#399b52';cx.lineWidth=3;cx.beginPath();cx.moveTo(x,floor);cx.lineTo(x,floor-16);cx.stroke();for(let a=0;a<5;a++){let ang=a*Math.PI*2/5;cx.fillStyle='#ff8dbb';cx.beginPath();cx.arc(x+Math.cos(ang)*5,floor-18+Math.sin(ang)*5,4,0,7);cx.fill()}cx.fillStyle='#ffdc63';cx.beginPath();cx.arc(x,floor-18,3,0,7);cx.fill()}
+ gems.forEach(g=>{if(g.got)return;let yy=g.y+Math.sin(performance.now()/250+g.phase)*5;cx.save();cx.translate(g.x,yy);cx.rotate(Math.PI/4);rounded(-9,-9,18,18,3,'#37cfff');cx.restore();cx.fillStyle='#d9ffff';cx.fillRect(g.x-3,yy-7,3,7)});
+ enemies.forEach(e=>{rounded(e.x,floor-29,32,28,11,'#8054a8');cx.fillStyle='white';cx.fillRect(e.x+7,floor-21,6,7);cx.fillRect(e.x+20,floor-21,6,7);cx.fillStyle='#39294e';cx.fillRect(e.x+9,floor-19,2,4);cx.fillRect(e.x+22,floor-19,2,4);cx.fillStyle='#49315f';cx.fillRect(e.x+7,floor-3,7,4);cx.fillRect(e.x+21,floor-3,7,4)});
+ Object.values(actors).forEach(p=>{if(mode==='one'&&p.id!==active)return;drawHero(p)});
+ // rainbow gate
+ let gx=world-90;cx.lineWidth=13;['#ff658c','#ffb84f','#ffec65','#63d88a','#57c9ed','#9275ed'].forEach((c,i)=>{cx.strokeStyle=c;cx.beginPath();cx.arc(gx,floor+1,70-i*8,Math.PI,Math.PI*2);cx.stroke()});rounded(gx-9,floor-5,18,90,5,'#fff');
+ cx.restore();
+}
+function controls(p){
+ if(mode==='two'&&p.id==='ruby')return {l:keys.a||touch.left,r:keys.d||touch.right,j:keys.w};
+ if(mode==='two'&&p.id==='yumi')return {l:keys.arrowleft,r:keys.arrowright,j:keys.arrowup};
+ if(mode==='one'&&p.id===active)return {l:keys.arrowleft||keys.a||touch.left,r:keys.arrowright||keys.d||touch.right,j:keys.arrowup||keys.w||keys[' ']||touch.jump};
+ return {l:false,r:false,j:false};
+}
+function update(dt){
+ Object.values(actors).forEach(p=>{
+ if(mode==='one'&&p.id!==active)return;
+ let k=controls(p),speed=p.id==='yumi'?270:225;p.vx=0;if(k.l){p.vx=-speed;p.face=-1}if(k.r){p.vx=speed;p.face=1}
+ if(k.j&&p.ground){p.vy=p.id==='ruby'?-600:-535;p.ground=false}
+ p.vy+=1550*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.x=Math.max(0,Math.min(world-p.w,p.x));p.ground=false;p.walk+=dt*10;
+ platforms.forEach(pl=>{if(p.x+p.w>pl.x&&p.x<pl.x+pl.w&&p.y+p.h>=pl.y&&p.y+p.h-p.vy*dt<=pl.y&&p.vy>=0){p.y=pl.y-p.h;p.vy=0;p.ground=true}});
+ if(p.y>vh+90){p.x=70;p.y=floor-p.h;p.vy=0;lives--;lifeBox.textContent=lives;if(lives<=0)finish(false)}
+ if(p.inv>0)p.inv-=dt;
+ });
+ enemies.forEach(e=>{e.x+=e.d*70*dt;if(e.x<e.min||e.x>e.max)e.d*=-1});
+ Object.values(actors).forEach(p=>{if(mode==='one'&&p.id!==active)return;enemies.forEach(e=>{if(p.inv<=0&&p.x+p.w>e.x&&p.x<e.x+32&&p.y+p.h>floor-30&&p.y<floor){if(p.vy>120){e.x=-300;score++;scoreBox.textContent=score;p.vy=-310}else{p.inv=1.5;lives--;lifeBox.textContent=lives;p.x-=p.face*35;if(lives<=0)finish(false)}}})});
+ gems.forEach(g=>{if(g.got)return;Object.values(actors).forEach(p=>{if(mode==='one'&&p.id!==active)return;if(p.x+p.w>g.x-11&&p.x<g.x+11&&p.y+p.h>g.y-12&&p.y<g.y+12){g.got=true;score++;scoreBox.textContent=score}})});
+ let lead=mode==='two'?Math.max(actors.ruby.x,actors.yumi.x):actors[active].x;cam=Math.max(0,Math.min(world-vw,lead-vw*.37));
+ let goal=mode==='one'?actors[active].x:Math.min(actors.ruby.x,actors.yumi.x);if(goal>world-160&&score>=12)finish(true);
+}
+function finish(win){if(!playing)return;playing=false;screen.classList.remove('hidden');panel.innerHTML=`<h1>${win?'🎉 Tuyệt vời!':'💗 Thử lại nhé!'}</h1><p class="subtitle">${win?'Ruby và YuMi đã mở Cổng Cầu Vồng!':'Hai chị em cùng cố gắng nhé!'}</p><p><b>Ngọc thu thập: ${score}/12</b></p><button class="menu" id="retry">Chơi lại</button><button class="menu pink" id="home">Màn hình đầu</button>`;document.getElementById('retry').onclick=()=>start(mode);document.getElementById('home').onclick=menu}
+function menu(){screen.classList.remove('hidden');panel.innerHTML=`<h1>Ruby & YuMi</h1><p class="subtitle">Cuộc phiêu lưu Vương quốc Cầu Vồng</p><div class="heroes"><div class="heroCard"><div class="heroIcon">👧🏻</div>🌸 RUBY<br><small>11 tuổi · Nhảy cao</small></div><div class="heroCard y"><div class="heroIcon">👧🏻</div>💜 YUMI<br><small>8 tuổi · Chạy nhanh</small></div></div><button class="menu" id="one">⭐ Một người chơi</button><button class="menu pink" id="two">👭 Hai người chơi</button><p class="note">Một người: dùng nút cảm ứng, đổi nhân vật bất cứ lúc nào.<br>Hai người: Ruby dùng A/D/W, YuMi dùng phím mũi tên trên bàn phím.<br>Trên iPhone hiện dùng chung nút cảm ứng để lần lượt điều khiển.</p>`;document.getElementById('one').onclick=()=>start('one');document.getElementById('two').onclick=()=>start('two')}
+function start(m){mode=m;active='ruby';score=0;lives=3;scoreBox.textContent=0;lifeBox.textContent=3;level();screen.classList.add('hidden');playing=true;last=performance.now();requestAnimationFrame(loop)}
+function loop(t){if(!playing)return;let dt=Math.min((t-last)/1000,.032);last=t;update(dt);draw();if(playing)requestAnimationFrame(loop)}
+document.getElementById('one').onclick=()=>start('one');document.getElementById('two').onclick=()=>start('two');
+document.getElementById('swap').onclick=()=>{if(mode==='one')active=active==='ruby'?'yumi':'ruby'};
+window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();keys[k]=true;if(['arrowleft','arrowright','arrowup',' '].includes(k))e.preventDefault()});
+window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+document.querySelectorAll('[data-k]').forEach(b=>{let k=b.dataset.k;b.addEventListener('pointerdown',e=>{e.preventDefault();touch[k]=true});['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,e=>{e.preventDefault();touch[k]=false}))});
+level();draw();
+})();
+</script>
+</body>
+</html>
